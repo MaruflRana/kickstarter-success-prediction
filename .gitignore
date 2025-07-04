@@ -1,4 +1,9 @@
-echo "data/kickstarter.csv" >> .gitignore
-git rm --cached data/kickstarter.csv
-git commit -m "Remove large CSV and add to .gitignore"
-git push origin main
+# echo "data/kickstarter.csv" >> .gitignore
+# git rm --cached data/kickstarter.csv
+# git commit -m "Remove large CSV and add to .gitignore"
+# git push origin main
+
+
+# Ignore virtual environments
+.venv/
+venv/
