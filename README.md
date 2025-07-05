@@ -2,62 +2,91 @@
 
 This project leverages machine learning to predict the success or failure of Kickstarter campaigns based on their initial attributes. By analyzing historical campaign data, we aim to identify key factors influencing a project's outcome, providing valuable insights for creators and backers alike.
 
-## 📊 Dataset
+---
 
-The dataset used in this project is sourced from Kaggle's [Kickstarter Projects dataset](https://www.kaggle.com/datasets/kemical/kickstarter-projects), which contains information on over 300,000 Kickstarter campaigns. Key features include:
+## 📊 Dataset Overview
 
-- `category_name`: The specific category of the project.
-- `country`: The country where the campaign was launched.
-- `usd_goal`: The funding goal in USD.
-- `day_of_week`: The day of the week the campaign launched.
-- `is_weekend`: Whether the campaign launched on a weekend.
-- `binary_state`: The final outcome (0 for Failed, 1 for Successful).
+We use the “400,000 Kickstarter Projects” dataset by toshimelonhead on Kaggle. It contains **≈400 000** records of campaigns launched between 2009 and 2018. Below is a summary of the main columns:
 
-## 🧪 Project Workflow
+| Column               | Description                                                                                  |
+|----------------------|----------------------------------------------------------------------------------------------|
+| `id`                 | Numeric identifier for each project                                                          |
+| `name`               | Project title                                                                                |
+| `category`           | Subcategory (e.g. “Rock”, “Tabletop Games”)                                                  |
+| `main_category`      | Broad category (e.g. “Music”, “Games”)                                                       |
+| `currency`           | Currency code in which the goal was set (e.g. “USD”, “GBP”)                                  |
+| `deadline`           | Date the campaign ended (YYYY‑MM‑DD)                                                         |
+| `goal`               | Funding goal (in original currency units)                                                    |
+| `launched`           | Launch timestamp (YYYY‑MM‑DD HH:MM:SS)                                                       |
+| `pledged`            | Pledged amount (in original currency units)                                                  |
+| `state`              | Final status (e.g. “successful”, “failed”, “canceled”, “live”)                              |
+| `backers`            | Number of backers                                                                           |
+| `country`            | Country code where the campaign was hosted (e.g. “US”, “GB”)                                 |
+| `usd_pledged`        | Pledged amount converted to USD using project‐specific exchange rates                        |
+| `usd_goal_real`      | Goal amount converted to USD using current exchange rates                                    |
+| `usd_pledged_real`   | Pledged amount converted to USD using current exchange rates                                 |
 
-The project follows a standard machine learning workflow:
+---
 
-1. **Data Loading**: Import the dataset into a pandas DataFrame.
-2. **Data Cleaning & Feature Engineering**:
-   - Handle missing values and filter relevant campaign states.
-   - Engineer new time-based features like `day_of_week` and `is_weekend`.
-3. **Data Preprocessing**:
-   - One-hot encode categorical variables.
-   - Drop unnecessary or leaky columns.
-4. **Model Training**:
-   - Split the data into training and testing sets.
-   - Train a Random Forest Classifier with `class_weight='balanced'` to address class imbalance.
-5. **Model Evaluation**:
-   - Assess model performance using accuracy, classification report (precision, recall, F1-score), and ROC AUC.
-6. **Feature Importance Analysis**:
-   - Visualize the top 20 most important features used in model decisions.
+## 📈 Key Results & Findings
 
-## 📈 Results
+After a comprehensive analysis and model comparison, the final **Random Forest Classifier** proved to be the most effective model.
 
-The final, improved Random Forest model achieved the following performance on the test set:
+- **Final Model Accuracy**: ~78%  
+- **Recall (for 'Successful' class)**: ~69%, showing a strong ability to identify successful campaigns  
+- **Key Feature Insights**: The model identified the project's **funding goal**, **launch date** (year, day of week), and **category** as the most influential factors in predicting its success
 
-- **Accuracy**: ~78%
-- **Precision (Successful class)**: ~73%
-- **Recall (Successful class)**: ~69%
-- **Key Feature Insights**:
-  - Campaign **funding goal** (usd_goal) is highly influential.
-  - The **category** and **country** of the campaign are also strong predictors.
-  - Launch timing features like `day_of_week` and `is_weekend` showed moderate predictive power.
+---
+
+## 🔁 Project Workflow
+
+This project follows a standard supervised machine learning pipeline:
+
+1. **Data Loading**  
+   - Read `kickstarter.csv` into a pandas DataFrame with exception handling  
+   - Inspect `df.head()`, `df.info()`, and missing-value counts  
+
+2. **Exploratory Data Analysis (EDA)**  
+   - Plot distributions of `usd_goal_real`, launch dates, and success rates  
+   - Compare success across categories and countries  
+   - Identify outliers and class imbalances  
+
+3. **Feature Engineering**  
+   - Convert `launched` to datetime  
+   - Create `day_of_week`, `is_weekend`, and `launch_year` features  
+   - Map `state` to binary `binary_state` (1 = successful, 0 = failed)  
+
+4. **Data Cleaning & Preprocessing**  
+   - Filter to only `successful` and `failed` campaigns  
+   - Drop leaky columns (`usd_pledged`, `backers`, `state`) and other metadata  
+   - One-hot encode categorical variables (`category`, `main_category`, `country`)  
+   - Split into train/test sets (80/20)  
+
+5. **Model Training**  
+   - Train a Random Forest Classifier with `class_weight='balanced'`  
+   - Optionally train XGBoost or LightGBM for comparison  
+
+6. **Model Evaluation**  
+   - Calculate accuracy, precision, recall, and F1-score  
+   - Plot confusion matrix and ROC curve  
+   - Compute ROC AUC  
+
+7. **Feature Importance Analysis**  
+   - Extract feature importances from the best model  
+   - Visualize the top 20 features in a bar chart  
+
+---
 
 ## 🛠️ Getting Started
 
 ### Prerequisites
 
-Make sure you have the following installed:
+- Python 3.7+  
+- pip (Python package installer)
 
-- Python 3.7 or higher  
-- pip package manager  
-- Jupyter Notebook or JupyterLab
-
-### Installation
-
-Clone the repository:
+### Installation & Setup
 
 ```bash
 git clone https://github.com/MaruflRana/kickstarter-success-prediction.git
 cd kickstarter-success-prediction
+pip install -r requirements.txt
