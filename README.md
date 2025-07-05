@@ -19,28 +19,39 @@ The project follows a standard machine learning workflow:
 
 1. **Data Loading**: Import the dataset into a pandas DataFrame.
 2. **Data Cleaning & Feature Engineering**:
-   - Handle missing values.
-   - Filter the dataset for relevant campaign states.
-   - Engineer new features like `day_of_week` and `is_weekend` from the `launched_at` timestamp.
+   - Handle missing values and filter relevant campaign states.
+   - Engineer new time-based features like `day_of_week` and `is_weekend`.
 3. **Data Preprocessing**:
    - One-hot encode categorical variables.
-   - Drop unnecessary or "leaky" columns.
+   - Drop unnecessary or leaky columns.
 4. **Model Training**:
    - Split the data into training and testing sets.
    - Train a Random Forest Classifier with `class_weight='balanced'` to address class imbalance.
 5. **Model Evaluation**:
-   - Assess model performance using accuracy and a detailed classification report (precision, recall, F1-score).
+   - Assess model performance using accuracy, classification report (precision, recall, F1-score), and ROC AUC.
 6. **Feature Importance Analysis**:
-   - Visualize the top 20 most influential features that the model uses for its predictions.
+   - Visualize the top 20 most important features used in model decisions.
+
+## 📈 Results
+
+The final, improved Random Forest model achieved the following performance on the test set:
+
+- **Accuracy**: ~78%
+- **Precision (Successful class)**: ~73%
+- **Recall (Successful class)**: ~69%
+- **Key Feature Insights**:
+  - Campaign **funding goal** (usd_goal) is highly influential.
+  - The **category** and **country** of the campaign are also strong predictors.
+  - Launch timing features like `day_of_week` and `is_weekend` showed moderate predictive power.
 
 ## 🛠️ Getting Started
 
 ### Prerequisites
 
-Ensure you have the following installed:
+Make sure you have the following installed:
 
-- Python 3.7 or higher
-- Pip package manager
+- Python 3.7 or higher  
+- pip package manager  
 - Jupyter Notebook or JupyterLab
 
 ### Installation
